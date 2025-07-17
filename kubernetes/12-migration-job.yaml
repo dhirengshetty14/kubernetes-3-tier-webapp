@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: db-migration
+  namespace: dhirenstore
+spec:
+  template:
+    spec:
+      containers:
+      - name: migration
+        image: trainwithshubham/dhirenstore-migration:1
+        imagePullPolicy: Always
+        env:
+        - name: MONGODB_URI
+          value: "mongodb://mongodb-service:27017/dhirenstore"
+      restartPolicy: OnFailure
