@@ -4,7 +4,6 @@ pipeline {
     agent any
     
     environment {
-        // Update the main app image name to match the deployment file
         DOCKER_IMAGE_NAME = 'laxg66/dhirenstore-app'
         DOCKER_MIGRATION_IMAGE_NAME = 'laxg66/dhirenstore-migration'
         DOCKER_IMAGE_TAG = "${BUILD_NUMBER}"
@@ -106,7 +105,6 @@ pipeline {
             }
         }
         
-        // Add this new stage
         stage('Update Kubernetes Manifests') {
             steps {
                 script {
