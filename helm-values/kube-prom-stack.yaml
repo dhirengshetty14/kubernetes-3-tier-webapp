@@ -1,41 +1,17 @@
-# Default values for kube-prometheus-stack.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
-## Provide a name in place of kube-prometheus-stack for `app:` labels
-##
 nameOverride: ""
 
-## Override the deployment namespace
-##
 namespaceOverride: ""
 
-## Provide a k8s version to auto dashboard import script example: kubeTargetVersionOverride: 1.26.6
-##
 kubeTargetVersionOverride: ""
 
-## Allow kubeVersion to be overridden while creating the ingress
-##
 kubeVersionOverride: ""
-
-## Provide a name to substitute for the full names of resources
-##
 fullnameOverride: ""
 
-## Labels to apply to all resources
-##
 commonLabels: {}
-# scmhash: abc123
-# myLabel: aakkmd
 
-## Install Prometheus Operator CRDs
-##
 crds:
   enabled: true
-  ## The CRD upgrade job mitigates the limitation of helm not being able to upgrade CRDs.
-  ## The job will apply the CRDs to the cluster before the operator is deployed, using helm hooks.
-  ## It deploy a corresponding clusterrole, clusterrolebinding and serviceaccount to apply the CRDs.
-  ## This feature is in preview, off by default and may change in the future.
+
   upgradeJob:
     enabled: false
     forceConflicts: false
@@ -54,60 +30,19 @@ crds:
         pullPolicy: IfNotPresent
 
     env: {}
-    ## Define resources requests and limits for single Pods.
-    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
-    ##
+    
     resources: {}
-
-    ## Additional volumes
-    ##
     extraVolumes: []
 
-    ## Additional volume mounts
-    ##
+   
     extraVolumeMounts: []
-
-    ## Define which Nodes the Pods are scheduled on.
-    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector
-    ##
     nodeSelector: {}
 
-    ## Assign custom affinity rules to the upgrade-crd job
-    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
-    ##
     affinity: {}
-    # nodeAffinity:
-    #   requiredDuringSchedulingIgnoredDuringExecution:
-    #     nodeSelectorTerms:
-    #     - matchExpressions:
-    #       - key: kubernetes.io/e2e-az-name
-    #         operator: In
-    #         values:
-    #         - e2e-az1
-    #         - e2e-az2
-
-    ## If specified, the pod's tolerations.
-    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/
-    ##
+  
     tolerations: []
-    # - key: "key"
-    #   operator: "Equal"
-    #   value: "value"
-    #   effect: "NoSchedule"
-
-    ## If specified, the pod's topology spread constraints.
-    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/
-    ##
     topologySpreadConstraints: []
-    # - maxSkew: 1
-    #   topologyKey: topology.kubernetes.io/zone
-    #   whenUnsatisfiable: DoNotSchedule
-    #   labelSelector:
-    #     matchLabels:
-    #       app: alertmanager
 
-    # ## Labels to add to the upgrade-crd job
-    # ##
     labels: {}
 
     ## Annotations to add to the upgrade-crd job
@@ -132,9 +67,7 @@ crds:
       labels: {}
       automountServiceAccountToken: true
 
-    ## Container-specific security context configuration
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-    ##
+
     containerSecurityContext:
       allowPrivilegeEscalation: false
       readOnlyRootFilesystem: true
@@ -142,10 +75,6 @@ crds:
         drop:
           - ALL
 
-    ## SecurityContext holds pod-level security attributes and common container settings.
-    ## This defaults to non root user with uid 1000 and gid 2000. *v1.PodSecurityContext  false
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-    ##
     podSecurityContext:
       fsGroup: 65534
       runAsGroup: 65534
@@ -154,17 +83,9 @@ crds:
       seccompProfile:
         type: RuntimeDefault
 
-## custom Rules to override "for" and "severity" in defaultRules
-##
-customRules: {}
-  # AlertmanagerFailedReload:
-  #   for: 3m
-  # AlertmanagerMembersInconsistent:
-  #   for: 5m
-  #   severity: "warning"
 
-## Create default rules for monitoring the cluster
-##
+customRules: {}
+
 defaultRules:
   create: true
   rules:
@@ -301,55 +222,23 @@ defaultRules:
 
   ## Disabled PrometheusRule alerts
   disabled: {}
-  # KubeAPIDown: true
-  # NodeRAIDDegraded: true
-
-## Deprecated way to provide custom recording or alerting rules to be deployed into the cluster.
-##
-# additionalPrometheusRules: []
-#  - name: my-rule-file
-#    groups:
-#      - name: my_group
-#        rules:
-#        - record: my_record
-#          expr: 100 * my_record
-
-## Provide custom recording or alerting rules to be deployed into the cluster.
-##
+ 
 additionalPrometheusRulesMap: {}
-#  rule-name:
-#    groups:
-#    - name: my_group
-#      rules:
-#      - record: my_record
-#        expr: 100 * my_record
 
-##
 global:
   rbac:
     create: true
 
-    ## Create ClusterRoles that extend the existing view, edit and admin ClusterRoles to interact with prometheus-operator CRDs
     ## Ref: https://kubernetes.io/docs/reference/access-authn-authz/rbac/#aggregated-clusterroles
     createAggregateClusterRoles: false
     pspEnabled: false
     pspAnnotations: {}
-      ## Specify pod annotations
-      ## Ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#apparmor
-      ## Ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#seccomp
-      ## Ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#sysctl
-      ##
-      # seccomp.security.alpha.kubernetes.io/allowedProfileNames: '*'
-      # seccomp.security.alpha.kubernetes.io/defaultProfileName: 'docker/default'
-      # apparmor.security.beta.kubernetes.io/defaultProfileName: 'runtime/default'
 
-  ## Global image registry to use if it needs to be overridden for some specific use cases (e.g local registries, custom images, ...)
-  ##
   imageRegistry: ""
 
   ## Reference to one or more secrets to be used when pulling images
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ##
+  
   imagePullSecrets: []
   # - name: "image-pull-secret"
   # or
@@ -383,16 +272,13 @@ prometheus-windows-exporter:
     collectors:
       enabled: '[defaults],memory,container'
 
-## Configuration for alertmanager
-## ref: https://prometheus.io/docs/alerting/alertmanager/
-##
+
 alertmanager:
 
   ## Deploy alertmanager
   ##
   enabled: true
 
-  # Optional: Override the namespace where Alertmanager will be deployed.
   namespaceOverride: ""
 
   ## Annotations for Alertmanager
@@ -417,9 +303,6 @@ alertmanager:
     # -- Enable network policy for Alertmanager
     enabled: false
 
-    # -- Define policy types. If egress is enabled, both Ingress and Egress will be used
-    # Valid values are ["Ingress"] or ["Ingress", "Egress"]
-    ##
     policyTypes:
       - Ingress
 
