@@ -32,6 +32,26 @@ Here’s how things are organized:
 - `docker-compose.yml` — For spinning up everything locally
 - `Jenkinsfile` — CI/CD pipeline automation
 
+## Kubernetes Manifests
+Kubernetes Manifests
+This repository contains the following Kubernetes manifest files:
+
+- mongo-secret.yaml: Creates a Kubernetes Secret to store the MongoDB password securely.
+
+- mongo-configmap.yaml: Creates a ConfigMap for non-sensitive MongoDB configuration like the database host and name.
+
+- mongo-deployment.yaml: A Deployment that defines the desired state for the MongoDB pod.
+
+- mongo-service.yaml: A ClusterIP service to expose the MongoDB database to other services within the cluster.
+
+- api-deployment.yaml: A Deployment for the backend Flask API.
+
+- api-service.yaml: A ClusterIP service to expose the backend API to the frontend.
+
+- client-deployment.yaml: A Deployment for the frontend React application.
+
+- client-service.yaml: A LoadBalancer or NodePort service that exposes the frontend to the internet, making it accessible to users.
+
 ## 🌐 How It All Fits Together
 
 1. **Develop locally** with Docker Compose.
