@@ -1,4 +1,5 @@
-# Kubernetes 3-Tier Web App
+# Kubernetes 3-Tier Web App 
+<img width="40" height="40" alt="image" src="https://github.com/user-attachments/assets/e32f3040-d3b5-4245-a6cf-8eb18c68f614" />
 
 Welcome! This project is a hands-on, real-world example of deploying a modern 3-tier web application on Kubernetes. If you’re looking to understand how to take a full-stack app from local development to production-grade cloud infrastructure, you’re in the right place.
 
